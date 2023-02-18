@@ -1,3 +1,4 @@
+import './widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/user_transactions.dart';
@@ -32,6 +33,9 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Tracker'),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,6 +53,11 @@ class MyHomePage extends StatelessWidget {
             UserTransactions(),
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
       ),
     );
   }

@@ -6,19 +6,19 @@ import '../models/transaction.dart';
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
 
-  const TransactionList(this.transactions,{super.key});
+  const TransactionList(this.transactions, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-      child: 
-        ListView(
-        children: transactions.map((tx) {
+      child: ListView.builder(
+        itemBuilder: (ctx, index) {
           return Card(
             child: Row(children: [
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     border: Border.all(
@@ -26,7 +26,7 @@ class TransactionList extends StatelessWidget {
                   width: 2,
                 )),
                 child: Text(
-                  '\$${tx.amount}',
+                  '\$${transactions[index].amount.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -38,14 +38,14 @@ class TransactionList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tx.title,
+                    transactions[index].title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
                   Text(
-                    DateFormat.yMMMEd().format(tx.date),
+                    DateFormat.yMMMEd().format(transactions[index].date),
                     style: const TextStyle(
                       color: Colors.grey,
                     ),
@@ -54,7 +54,8 @@ class TransactionList extends StatelessWidget {
               ),
             ]),
           );
-        }).toList(),
+        },
+        itemCount: transactions.length,
       ),
     );
   }
