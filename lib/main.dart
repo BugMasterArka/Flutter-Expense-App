@@ -1,3 +1,5 @@
+import 'package:expense_app/widgets/chart.dart';
+
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +17,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Expense Tracker',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        accentColor: Colors.amber,
-        fontFamily: 'Quicksand',
-        appBarTheme: const AppBarTheme(
-          titleTextStyle: TextStyle(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+          fontFamily: 'Quicksand',
+          textTheme: const TextTheme(
+              titleLarge: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+          appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 20,
-          )
-        )
-      ),
+          ))),
       home: const MyHomePage(),
     );
   }
@@ -42,14 +48,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    Transaction(
-        id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    Transaction(
-        id: 't2',
-        title: 'Weekly Groceries',
-        amount: 16.53,
-        date: DateTime.now()),
+    // Transaction(
+    //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+    // Transaction(
+    //     id: 't2',
+    //     title: 'Weekly Groceries',
+    //     amount: 16.53,
+    //     date: DateTime.now()),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(const Duration(days: 7),),
+      );
+    }).toList();
+  }
 
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -67,7 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
         context: ctx,
         builder: (_) {
-          return GestureDetector(onTap: () {},behavior: HitTestBehavior.opaque,child: NewTransaction(_addNewTransaction),);
+          return GestureDetector(
+            onTap: () {},
+            behavior: HitTestBehavior.opaque,
+            child: NewTransaction(_addNewTransaction),
+          );
         });
   }
 
@@ -75,7 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expense Tracker',),
+        title: const Text(
+          'Expense Tracker',
+        ),
         actions: [
           IconButton(
               onPressed: () => _startAddNewTransaction(context),
@@ -87,14 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                elevation: 5,
-                child: Text('Chart'),
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions),
           ],
         ),
