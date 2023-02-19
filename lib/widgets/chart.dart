@@ -38,7 +38,7 @@ class Chart extends StatelessWidget {
     });
   }
 
-  Chart(this.recentTransactions, {super.key});
+  const Chart(this.recentTransactions, {super.key});
 
   @override
   Widget build(BuildContext context) {
