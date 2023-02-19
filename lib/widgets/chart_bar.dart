@@ -5,15 +5,20 @@ class ChartBar extends StatelessWidget {
   final double spendingAmt;
   final double spendingPctofTotal;
 
-  const ChartBar(this.label,this.spendingAmt,this.spendingPctofTotal,{super.key});
+  const ChartBar(this.label, this.spendingAmt, this.spendingPctofTotal,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         children: [
-          Text('\$${spendingAmt.toStringAsFixed(0)}'),
+          FittedBox(
+            child: spendingAmt > 1000.0
+                ? Text('\$${(spendingAmt / 1000.0).toStringAsFixed(1)}K')
+                : Text('\$${spendingAmt.toStringAsFixed(0)}'),
+          ),
           const Padding(padding: EdgeInsets.only(bottom: 5)),
           SizedBox(
             height: 60,
@@ -37,7 +42,7 @@ class ChartBar extends StatelessWidget {
               ),
             ]),
           ),
-          const Padding(padding: EdgeInsets.only(top: 2,bottom: 2)),
+          const Padding(padding: EdgeInsets.only(top: 2, bottom: 2)),
           Text(label),
         ],
       ),
