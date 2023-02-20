@@ -5,13 +5,14 @@ import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function _deleteTx;
 
-  const TransactionList(this.transactions, {super.key});
+  const TransactionList(this.transactions, this._deleteTx, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 500,
+      height: 450,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -42,7 +43,8 @@ class TransactionList extends StatelessWidget {
                         padding: const EdgeInsets.all(5.0),
                         child: FittedBox(
                           child: transactions[index].amount > 1000.0
-                              ? Text('\$${(transactions[index].amount / 1000.0).toStringAsFixed(2)}k')
+                              ? Text(
+                                  '\$${(transactions[index].amount / 1000.0).toStringAsFixed(2)}k')
                               : Text(
                                   '\$${transactions[index].amount.toStringAsFixed(2)}',
                                   style: const TextStyle(
@@ -60,6 +62,13 @@ class TransactionList extends StatelessWidget {
                         color: Colors.grey,
                         fontSize: 16,
                       ),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () {
+                        _deleteTx(transactions[index].id);
+                      },
                     ),
                   ),
                 );
