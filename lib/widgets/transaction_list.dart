@@ -12,23 +12,29 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: [
-              const Padding(padding: EdgeInsets.all(20)),
-              Text(
-                'No Transactions Yet!',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Padding(padding: EdgeInsets.all(20)),
-              SizedBox(
-                height: 300,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (context, constraints) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: constraints.maxHeight * 0.1,
                 ),
-              ),
-            ],
-          )
+                Text(
+                  'No Transactions Yet!',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(
+                  height: constraints.maxHeight * 0.15,
+                ),
+                SizedBox(
+                  height: constraints.maxHeight * 0.6,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            );
+          })
         : ListView.builder(
             itemBuilder: (ctx, index) {
               return Card(
@@ -61,13 +67,21 @@ class TransactionList extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Colors.red,
-                    onPressed: () {
-                      _deleteTx(transactions[index].id);
-                    },
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 460
+                      ? TextButton.icon(
+                          onPressed: () {
+                            _deleteTx(transactions[index].id);
+                          },
+                          style: const ButtonStyle(foregroundColor: MaterialStatePropertyAll(Colors.red)),
+                          icon: const Icon(Icons.delete),
+                          label: const Text('Delete'))
+                      : IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Colors.red,
+                          onPressed: () {
+                            _deleteTx(transactions[index].id);
+                          },
+                        ),
                 ),
               );
             },
